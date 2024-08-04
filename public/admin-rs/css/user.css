@@ -1,0 +1,28 @@
+.table-users .name {
+    vertical-align: center;
+}
+
+.table-users .name .avatar {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.table-users .name .inner-name {
+    margin-left: 10px;
+}
+
+.table-users .name .inner-name .fullname {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 100%;
+    margin-bottom: 3px;
+}
+
+.table-users .name .inner-name .username {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 100%;
+    color: #616161;
+}
