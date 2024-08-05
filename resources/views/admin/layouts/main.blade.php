@@ -62,6 +62,11 @@
 
     <!-- REQUIRED SCRIPTS -->
     @include('admin.partials.js')
+    <style>
+        * {
+            font-family: 'montserrat', sans-serif;
+        }
+    </style>
 </body>
 
 </html>

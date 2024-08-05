@@ -7,15 +7,15 @@
     <div class="w-100 d-flex justify-content-between align-items-center ">
         <div>Danh sách người dùng</div>
         <div class="d-flex">
-            <input class="form-control mr-sm-2 " type="search" placeholder="Search" aria-label="Search">
+            <input class="form-control mr-sm-2 " type="search" placeholder="Tìm kiếm" aria-label="Search">
 
             <div class="dropdown">
                 <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-file-export"></i>
-                    Export
+                    Xuất
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item text-body" href="#"> <i class="fas fa-print"></i> Print</a>
+                    <a class="dropdown-item text-body" href="#"> <i class="fas fa-print"></i> In</a>
                     <a class="dropdown-item text-body" href="#"> <i class="fas fa-file-excel"></i> Excel</a>
                     <a class="dropdown-item text-body" href="#"> <i class="fas fa-file-pdf"></i> Pdf</a>
                 </div>

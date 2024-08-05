@@ -16,9 +16,9 @@ class UserService extends BaseCrudService
 
     public function checkLogin($username, $password)
     {
-        $user = $this->user->where('username', $username)->first();
+        $user = $this->user->where('Username', $username)->first();
         if ($user) {
-            if (password_verify($password, $user->password)) {
+            if (password_verify($password, $user->Password)) {
                 return $user;
             }
         }

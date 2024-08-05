@@ -37,31 +37,32 @@
         </tbody>
     </table>
 
-    <div class="d-flex justify-content-center mt-3">
+    <div class="d-flex justify-content-center mt-3 paginate-dashboard-user">
         {{ $users->appends(['tab' => 'user'])->links('pagination::bootstrap-4') }}
     </div>
 
     <!-- Thêm CSS tùy chỉnh -->
     <style>
-        .pagination .page-link {
-            color: #28a745;
+        .paginate-dashboard-user .pagination .page-link {
+            color: #FFC107;
             /* Màu xanh lá cho văn bản */
         }
 
-        .pagination .page-item.active .page-link {
-            background-color: #28a745;
+        .paginate-dashboard-user .pagination .page-item.active .page-link {
+            background-color: #FFC107;
             /* Màu nền xanh lá cho trang hiện tại */
-            border-color: #28a745;
+            border-color: #FFC107;
             /* Viền màu xanh lá cho trang hiện tại */
+            color: white;
         }
 
-        .pagination .page-link:hover {
-            color: #218838;
+        .paginate-dashboard-user .pagination .page-link:hover {
+            color: #FFC107;
             /* Màu xanh lá đậm hơn khi hover */
         }
 
-        .pagination .page-link:focus {
-            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        .paginate-dashboard-user .pagination .page-link:focus {
+            box-shadow: 0 0 0 0.2rem rgba(162, 175, 14, 0.25);
             /* Bóng xanh lá khi focus */
         }
     </style>
@@ -94,32 +95,33 @@
         </tbody>
     </table>
 
-    <div class="d-flex justify-content-center mt-3">
+    <div class="d-flex justify-content-center mt-3 paginate-dashboard-quy">
         {{ $donationAndCampaignsByProvince->appends(['tab' => 'quy'])->links('pagination::bootstrap-4') }}
     </div>
 
 
     <!-- Thêm CSS tùy chỉnh -->
     <style>
-        .pagination .page-link {
-            color: #28a745;
+        .paginate-dashboard-quy .pagination .page-link {
+            color: #007BFF;
             /* Màu xanh lá cho văn bản */
         }
 
-        .pagination .page-item.active .page-link {
-            background-color: #28a745;
+        .paginate-dashboard-quy .pagination .page-item.active .page-link {
+            background-color: #007BFF;
             /* Màu nền xanh lá cho trang hiện tại */
-            border-color: #28a745;
+            border-color: #007BFF;
             /* Viền màu xanh lá cho trang hiện tại */
+            color: white;
         }
 
-        .pagination .page-link:hover {
-            color: #218838;
+        .paginate-dashboard-quy .pagination .page-link:hover {
+            color: #007BFF;
             /* Màu xanh lá đậm hơn khi hover */
         }
 
-        .pagination .page-link:focus {
-            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        .paginate-dashboard-quy .pagination .page-link:focus {
+            box-shadow: 0 0 0 0.2rem rgba(8, 61, 139, 0.25);
             /* Bóng xanh lá khi focus */
         }
     </style>

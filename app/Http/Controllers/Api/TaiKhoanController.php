@@ -35,8 +35,8 @@ class TaiKhoanController extends Controller
                 // Set User_ID and Username cookies
                 return response()->json([
                     'success' => 'Đăng nhập thành công',
-                    'user' => ['UserLogin_ID' => $user->Id, 'Username' => $user->Username]
-                ])->cookie('User_ID', $user->Id, 43200) // 30 days
+                    'user' => ['UserLogin_ID' => $user->id, 'Username' => $user->Username]
+                ])->cookie('User_ID', $user->id, 43200) // 30 days
                     ->cookie('UserName', $user->Username, 43200); // 30 days
             } else {
                 return response()->json(['error' => 'Email hoặc mật khẩu sai !'], 401);
