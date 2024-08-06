@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,13 +30,13 @@ class SearchController extends Controller
                                 ->orWhere('Name', 'LIKE', '%' . $keyword . '%');
                         }
                     })
-                    ->select('UserLogin_ID as User_ID', 'Username', 'Image')
+                    ->select('userlogin_id', 'Username', 'Image')
                     ->limit(10)
                     ->get();
 
                 $formattedUsers = $users->map(function ($user) {
                     return [
-                        'User_ID' => $user->User_ID,
+                        'User_ID' => $user->userlogin_id,
                         'Username' => $user->Username,
                         'Image' => $user->Image ? url($user->Image) : null,
                     ];
@@ -60,18 +61,21 @@ class SearchController extends Controller
 
                 $posts = $postsQuery->orderBy('Post_ID', 'desc')->limit(10)->get();
 
+                // Lấy tất cả user_information liên quan đến bài viết
+                $userIds = $posts->pluck('User_ID')->toArray();
+                $users = DB::table('user_information')
+                    ->whereIn('userlogin_id', $userIds)
+                    ->select('userlogin_id', 'Name', 'Image')
+                    ->get()
+                    ->keyBy('userlogin_id');
+
                 $result = [];
 
                 foreach ($posts as $post) {
-                    $user = DB::table('user_information')
-                        ->select('Name', 'Image')
-                        ->where('User_ID', $post->User_ID)
-                        ->first();
-
+                    $user = $users->get($post->User_ID);
                     $likeCount = DB::table('islike')
                         ->where('Post_ID', $post->Post_ID)
                         ->count();
-
                     $commentCount = DB::table('comment')
                         ->where('Post_ID', $post->Post_ID)
                         ->count();
@@ -84,8 +88,8 @@ class SearchController extends Controller
                         'createdAt' => $this->timeElapsedString($post->created_at),
                         'likes' => $likeCount,
                         'comments' => $commentCount,
-                        'name' => $user->Name,
-                        'avatar' => $user->Image ? url($user->Image) : null,
+                        'name' => $user ? $user->Name : null,
+                        'avatar' => $user && $user->Image ? url($user->Image) : null,
                     ];
                 }
 
@@ -103,6 +107,7 @@ class SearchController extends Controller
             return response()->json(['error' => 'Failed to retrieve data', 'message' => $e->getMessage()], 500);
         }
     }
+
 
 
 

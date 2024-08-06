@@ -214,8 +214,8 @@ class PostController extends Controller
             $formattedComments = [];
 
             foreach ($comments as $comment) {
-                $user = DB::table('User_Information')
-                    ->where('User_ID', $comment->User_ID)
+                $user = DB::table('user_information')
+                    ->where('userlogin_id', $comment->User_ID)
                     ->first();
 
                 if ($user) {
@@ -276,7 +276,7 @@ class PostController extends Controller
             ]);
 
             // Get user information for response
-            $user = DB::table('user_information')->where('User_ID', $user_ID)->first();
+            $user = DB::table('user_information')->where('userlogin_id', $user_ID)->first();
 
             if (!$user) {
                 return response()->json(['success' => false, 'error' => 'User not found'], 404);
@@ -288,7 +288,7 @@ class PostController extends Controller
                 'user_avatar' => $user->Image ? url($user->Image) : null,
                 'username' => $user->Name,
                 'content' => $content,
-                'imageComment' => $imagePath ? url($imagePath) : null, 
+                'imageComment' => $imagePath ? url($imagePath) : null,
                 'time' => 'vừa xong'
             ];
 

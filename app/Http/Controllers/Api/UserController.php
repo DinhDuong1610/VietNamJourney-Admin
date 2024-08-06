@@ -60,7 +60,7 @@ class UserController extends Controller
                     $join->on('u.User_ID', '=', 'l.User_ID')
                         ->where('l.Social', 'Facebook');
                 })
-                ->where('u.User_ID', $userId)
+                ->where('u.UserLogin_ID', $userId)
                 ->first();
 
             // Nếu không tìm thấy người dùng
@@ -206,7 +206,7 @@ class UserController extends Controller
         try {
             // Lấy thông tin người dùng từ bảng user_information, bao gồm trường Image và Check
             $user = DB::table('user_information')
-                ->where('User_ID', $userId)
+                ->where('UserLogin_ID', $userId)
                 ->first(['User_ID', 'Name', 'Image', 'Check']);
 
             // Kiểm tra tồn tại người dùng

@@ -12,15 +12,7 @@ use App\Models\InfoFormVolunteer;
 
 class CongDongController extends Controller
 {
-    public function checkDatabase()
-    {
-        try {
-            DB::connection()->getPdo();
-            return response()->json(['status' => 'success', 'message' => 'Kết nối đến cơ sở dữ liệu thành công.']);
-        } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'message' => 'Không thể kết nối đến cơ sở dữ liệu: ' . $e->getMessage()]);
-        }
-    }
+
     public function getSocialPosts(Request $request)
     {
         if ($request->isMethod('options')) {
@@ -30,6 +22,7 @@ class CongDongController extends Controller
         if ($request->isMethod('post')) {
             try {
                 $posts = DB::table('post')
+                    ->where('status', 1) // Thêm điều kiện status = 1
                     ->orderBy('Post_ID', 'desc')
                     ->get();
 
@@ -39,7 +32,7 @@ class CongDongController extends Controller
                     // Lấy thông tin người dùng từ bảng user_information, bao gồm trường Name, Image và Check
                     $user = DB::table('user_information')
                         ->select('Name', 'Image', 'Check')
-                        ->where('User_ID', $post->User_ID)
+                        ->where('UserLogin_ID', $post->User_ID) // Thay đổi thành UserLogin_ID
                         ->first();
 
                     // Kiểm tra tồn tại người dùng và trường Check
@@ -47,7 +40,7 @@ class CongDongController extends Controller
                         continue; // Bỏ qua bài viết nếu người dùng không hợp lệ hoặc chưa được check
                     }
 
-                    $likeCount = DB::table('IsLike')
+                    $likeCount = DB::table('islike')
                         ->where('Post_ID', $post->Post_ID)
                         ->count();
 
@@ -76,6 +69,7 @@ class CongDongController extends Controller
         }
     }
 
+
     public function getSocialOutstanding(Request $request)
     {
         if ($request->isMethod('options')) {
@@ -84,7 +78,7 @@ class CongDongController extends Controller
 
         if ($request->isMethod('get')) {
             try {
-                $outstandingUsers = DB::table('Follow')
+                $outstandingUsers = DB::table('follow')
                     ->select('following_id', DB::raw('COUNT(*) as follow_count'))
                     ->groupBy('following_id')
                     ->orderBy('follow_count', 'desc')
@@ -96,7 +90,7 @@ class CongDongController extends Controller
                 foreach ($outstandingUsers as $user) {
                     $userInfo = DB::table('user_information')
                         ->select('User_ID', 'username', 'image', 'check')
-                        ->where('User_ID', $user->following_id)
+                        ->where('UserLogin_ID', $user->following_id)
                         ->first();
 
                     $result[] = [

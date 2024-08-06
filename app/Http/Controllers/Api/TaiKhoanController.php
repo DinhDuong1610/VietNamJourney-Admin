@@ -28,6 +28,7 @@ class TaiKhoanController extends Controller
         try {
             // Check login information
             $user = DB::table('user')
+                ->select('id', 'Username', 'Password') // Chỉ định rõ các cột cần lấy
                 ->where('Username', $username)
                 ->first();
 
