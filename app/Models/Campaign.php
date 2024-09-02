@@ -20,6 +20,7 @@ class Campaign extends Model
 
     protected $casts = [
         'timeline' => 'array',
+        'location'=> 'array',
         'infoContact' => 'array',
         'infoOrganization' => 'array'
     ];
@@ -42,6 +43,11 @@ class Campaign extends Model
     public function post()
     {
         return $this->hasMany(Post::class, 'campaign_id', 'id');
+    }
+
+    public function fun()
+    {
+        return $this->hasMany(Fun::class, 'campaignId', 'id');
     }
 
 }

@@ -69,5 +69,59 @@ class CampaignController extends Controller
             return response()->json(["error" => "Không tìm thấy trạng thái cho userId và campaignId đã cung cấp"], 404);
         }
     }
+
+    public function createCampaign(Request $request)
+    {
+        $result = $this->campaignService->createCampaign($request);
+
+        if (isset($result['error'])) {
+            return response()->json($result, 400);
+        }
+
+        return response()->json($result, 201);
+    }
+
+    public function updateCampaign(Request $request)
+    {
+        // Log::info('Request received:', $request->all());
+
+        // // Xác thực dữ liệu đầu vào
+        // $validator = Validator::make($request->all(), [
+        //     'id' => 'required|integer',
+        //     'name' => 'sometimes|required|string|max:255',
+        //     'province' => 'sometimes|required|string|max:255',
+        //     'district' => 'sometimes|required|string|max:255',
+        //     'location' => 'sometimes|required|string',
+        //     'dateStart' => 'sometimes|required|date',
+        //     'dateEnd' => 'sometimes|required|date',
+        //     'totalMoney' => 'sometimes|required|numeric',
+        //     'moneyByVNJN' => 'sometimes|required|numeric',
+        //     'timeline' => 'sometimes|required|string',
+        //     'infoContact' => 'sometimes|required|string',
+        //     'infoOrganization' => 'sometimes|required|string',
+        //     'image' => 'sometimes|file|mimes:jpeg,png,jpg,gif|max:51200',
+        //     'description' => 'sometimes|required|string',
+        //     'plan' => 'sometimes|required|string',
+        // ]);
+
+        // // Kiểm tra nếu dữ liệu không hợp lệ
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'error' => $validator->errors()
+        //     ], 400);
+        // }
+
+        // Gọi CampaignService để cập nhật chiến dịch
+        $result = $this->campaignService->updateCampaign($request);
+
+        if ($result['status'] === 200) {
+            return response()->json([
+                'success' => 'Cập nhật chiến dịch thành công',
+                'campaign' => $result['campaign']
+            ], 200);
+        } else {
+            return response()->json(['error' => $result['error']], $result['status']);
+        }
+    }
     
 }

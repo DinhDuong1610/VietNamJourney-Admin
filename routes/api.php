@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\EmailController;
 use App\Http\Controllers\Api\CampaignController;
 use App\Http\Controllers\Api\VolunteerController;
+use App\Http\Controllers\Api\FunController;
 use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\UserController;
@@ -14,13 +15,14 @@ use App\Http\Controllers\Api\CongDongController;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Api\SearchController;
 
+
  
 
 Route::group(['prefix' => 'email'], function () {
     Route::get('/{userId}', [EmailController::class, 'getEmailsUser']);
-    // Route::get('/send', [EmailController::class, 'getEmailsSend'])->name('admin.pages.email.send');
+    // Route::get('/send', [EmailController::class, 'getEmailsSend'])->name('admin.pages.email.send'); chưa làm
     Route::get('/read/{userId}/{id}', [EmailController::class, 'getEmailById']);
-    // Route::get('/compose', [EmailController::class, 'compose'])->name('admin.pages.email.compose');
+    // Route::get('/compose', [EmailController::class, 'compose'])->name('admin.pages.email.compose'); chưa làm
     Route::post('/create', [EmailController::class, 'createEmail']);
     Route::post('/readed/{id}', [EmailController::class, 'updateEmailStatus']);
 });
@@ -31,12 +33,19 @@ Route::get('listCampaignEd/{province}', [CampaignController::class, 'getCampaign
 Route::get('getCampaign/{id}', [CampaignController::class, 'getCampaignDetail']);
 Route::get('getCampaignStatistics/{province}', [CampaignController::class, 'getCampaignStatistics']);
 
-Route::post('managerCampaign/{userId}', [CampaignController::class, 'managerCampaign']);
+Route::post('createCampaign', [CampaignController::class, 'createCampaign']); 
+Route::post('managerCampaign/{userId}', [CampaignController::class, 'managerCampaign']); 
 Route::post('getStatusVolunteer', [CampaignController::class, 'getStatusVolunteer']);
+Route::post('updateCampaign', [CampaignController::class, 'updateCampaign']); 
 
 Route::get('getJoined/{campaignId}', [VolunteerController::class, 'getJoined']);
 Route::get('getPending/{campaignId}', [VolunteerController::class, 'getPending']);
 
+// Route::post('registerVolunteer', [VolunteerController::class, 'register']); // chưa làm
+// Route::post('updateStatus', [VolunteerController::class, 'updateStatus']); // chưa làm
+
+Route::get('getFun', [FunController::class, 'getFunWithoutCampaign']);
+Route::get('getFunByCampaign/{campaignId}', [FunController::class, 'getByCampaign']);
 
 
 

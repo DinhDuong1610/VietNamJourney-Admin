@@ -55,8 +55,8 @@
                         </div>
                     </td>
                     <td>{{ $user->userInformation->Email }}</td>
-                    <td class="text-center">{{ $user->volunteer->count() }}</td> <!-- Số lượng chiến dịch -->
-                    <td class="text-center">{{ $user->post->count() }}</td> <!-- Số lượng bài viết -->
+                    <td class="text-center">{{ $user->volunteer->count() }}</td>
+                    <td class="text-center">{{ $user->post->count() }}</td>
                     <td class="text-center">
                         @if ($user->is_admin())
                             <span class="badge badge-pill badge-primary w-75"><span class="d-inline-block py-2">Admin</span></span>
