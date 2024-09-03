@@ -35,27 +35,17 @@ class CampaignService extends BaseCrudService
                     $query->where('status', 1);
                 }
             ])
-            ->orderBy('dateEnd')
+            ->orderBy('dateEnd', 'desc')
             ->orderBy('province')
             ->paginate(6);
     }
-
-    // public function getPendingCampaignList()
-    // {
-    //     return $this->campaign
-    //         ->where('status', 0)
-    //         ->with('userInformation')
-    //         ->orderBy('dateEnd')
-    //         ->orderBy('province')
-    //         ->paginate(7);
-    // }
 
     public function getPendingCampaignList()
     {
         return $this->campaign
             ->where('status', 0)
             ->with('user.userInformation') // Liên kết với thông tin người dùng
-            ->orderBy('dateEnd')
+            ->orderBy('dateEnd', 'desc')
             ->orderBy('province')
             ->paginate(7);
     }
@@ -76,7 +66,6 @@ class CampaignService extends BaseCrudService
             ->where('status', 1)
             ->count();
 
-        // Tính tổng số tiền đã thu được từ tất cả các chiến dịch
         $money = Campaign::sum('moneyByVNJN');
 
         return [
@@ -89,24 +78,17 @@ class CampaignService extends BaseCrudService
 
     public function updateStatus(int $campaignId, int $newStatus): bool
     {
-        // Tìm chiến dịch theo ID
         $campaign = $this->campaign->find($campaignId);
-
-        // Nếu không tìm thấy chiến dịch, ném lỗi
         if (!$campaign) {
             throw new ModelNotFoundException('Chiến dịch không tồn tại.');
         }
-
-        // Cập nhật trạng thái
         $campaign->status = $newStatus;
 
-        // Lưu thay đổi vào cơ sở dữ liệu
         return $campaign->save();
     }
 
     public function getCampaignDetail(int $campaignId)
     {
-        // Lấy chiến dịch theo ID kèm thông tin của người dùng
         return $this->campaign
             ->with('user.userInformation') 
             ->findOrFail($campaignId);

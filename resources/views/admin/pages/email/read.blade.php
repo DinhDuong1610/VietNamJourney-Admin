@@ -21,31 +21,27 @@
                     <div class="card-body p-0">
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item active">
-                                <a href="{{ route('admin.pages.email.index') }}" class="nav-link">
+                                <a href="{{ route('admin.pages.email.index') }}" class="nav-link item-nav-link">
                                     <i class="fas fa-inbox"></i> Hộp thư đến
                                     <span class="badge bg-success float-right">{{ $emails_admin->total() }}</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin.pages.email.send') }}" class="nav-link">
+                                <a href="{{ route('admin.pages.email.send') }}" class="nav-link item-nav-link">
                                     <i class="far fa-envelope"></i> Đã gửi
-                                    {{-- <span class="badge bg-success float-right">{{ $emails_send->total() }}</span> --}}
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="#" class="nav-link item-nav-link">
                                     <i class="far fa-trash-alt"></i> Thùng rác
                                 </a>
                             </li>
                         </ul>
                     </div>
-                    <!-- /.card-body -->
                 </div>
             </div>
-            <!-- /.col -->
             <div class="col-md-10">
                 <div class="card card-success card-outline">
-                    <!-- /.card-header -->
                     <div class="card-body p-0">
                         <div class="mailbox-read-info">
                             <h4><b>{{ $email->title }}</b></h4>
@@ -54,18 +50,12 @@
                                     class="mailbox-read-time float-right">{{ $email->created_at->format('H:i d/m/y') }}</span>
                             </h6>
                         </div>
-                        <!-- /.mailbox-read-info -->
                         <div class="mailbox-read-message" style="min-height: 80vh; font-size: 18px">
                             {!! nl2br(e($email->content)) !!}
                         </div>
-                        <!-- /.mailbox-read-message -->
                     </div>
-                    <!-- /.card-body -->
                 </div>
-                <!-- /.card -->
             </div>
-            <!-- /.col -->
         </div>
-        <!-- /.row -->
-    </div><!-- /.container-fluid -->
+    </div>
 @endsection

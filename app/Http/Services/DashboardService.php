@@ -1,12 +1,10 @@
 <?php
 
 namespace App\Http\Services;
-
 use App\Models\User;
 use App\Models\Campaign;
 use App\Models\Post;
 use Carbon\Carbon;
-
 class DashboardService
 {
     private User $user;
@@ -32,20 +30,21 @@ class DashboardService
             ->orderBy('joined', 'desc')
             ->paginate(4);
 
-        $posts = $this->post->get();
+        $posts = $this->post
+        ->where('status', 1)    
+        ->get();
 
         $campaigns = $this->campaign->get();
 
         // Số liệu thống kê chiến dịch trong 12 tháng
         $campaignStatistics = [];
         $currentYear = Carbon::now()->year;
-
         for ($month = 1; $month <= 12; $month++) {
             $campaignCount = $this->campaign
+                ->where('status', 1)
                 ->whereMonth('dateStart', $month)
                 ->whereYear('dateStart', $currentYear)
                 ->count();
-
             $campaignStatistics[] = [
                 'month' => $month,
                 'count' => $campaignCount
@@ -53,34 +52,34 @@ class DashboardService
         }
 
         // Tổng số tiền đã thu được từ tất cả các chiến dịch
-        $totalMoney = $this->campaign->sum('moneyByVNJN');
+        $totalMoney = $this->campaign->sum('totalMoney');
 
-        // Số lượng người dùng có check = 1 từ bảng user_information
+        // Số lượng người dùng tham gia tạo chiến dịch
         $userProfessional = $this->user
             ->whereHas('userInformation', function ($query) {
                 $query->where('check', 1);
             })
             ->count();
 
-        // Số lượng người dùng đã tham gia chiến dịch (và có check khác 1)
+        // Số lượng người dùng đã tham gia chiến dịch (không phải người tạo chiến dịch)
         $userJoined = $this->user
             ->whereHas('userInformation', function ($query) {
-                $query->where('check', 0); // check khác 1
+                $query->where('check', 0);
             })
-            ->whereHas('volunteer') // Đảm bảo người dùng đã tham gia chiến dịch
+            ->whereHas('volunteer')
             ->count();
 
-        // Số lượng người dùng chưa tham gia chiến dịch nào (và có check khác 1)
+        // Số lượng người dùng chưa tham gia chiến dịch nào
         $userNotJoined = $this->user
             ->whereHas('userInformation', function ($query) {
-                $query->where('check', 0); // check khác 1
+                $query->where('check', 0); 
             })
-            ->doesntHave('volunteer') // Đảm bảo người dùng chưa tham gia chiến dịch
+            ->doesntHave('volunteer') 
             ->count();
 
         // Tổng số tiền quyên góp và số lượng chiến dịch theo từng tỉnh thành
         $donationAndCampaignsByProvince = $this->campaign
-            ->selectRaw('province, COUNT(*) as total_campaigns, SUM(moneyByVNJN) as total_donation')
+            ->selectRaw('province, COUNT(*) as total_campaigns, SUM(totalMoney) as total_donation')
             ->groupBy('province')
             ->orderBy('total_campaigns', 'desc')
             ->paginate(5);

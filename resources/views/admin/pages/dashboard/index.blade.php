@@ -1,6 +1,6 @@
 @extends('admin.layouts.main')
 
-@section('title', 'Dashboard')
+@section('title', 'Quản lý')
 @section('page-title', 'Welcome')
 
 @section('card-title', 'Danh sách người dùng')
@@ -41,31 +41,7 @@
         {{ $users->appends(['tab' => 'user'])->links('pagination::bootstrap-4') }}
     </div>
 
-    <!-- Thêm CSS tùy chỉnh -->
-    <style>
-        .paginate-dashboard-user .pagination .page-link {
-            color: #FFC107;
-            /* Màu xanh lá cho văn bản */
-        }
 
-        .paginate-dashboard-user .pagination .page-item.active .page-link {
-            background-color: #FFC107;
-            /* Màu nền xanh lá cho trang hiện tại */
-            border-color: #FFC107;
-            /* Viền màu xanh lá cho trang hiện tại */
-            color: white;
-        }
-
-        .paginate-dashboard-user .pagination .page-link:hover {
-            color: #FFC107;
-            /* Màu xanh lá đậm hơn khi hover */
-        }
-
-        .paginate-dashboard-user .pagination .page-link:focus {
-            box-shadow: 0 0 0 0.2rem rgba(162, 175, 14, 0.25);
-            /* Bóng xanh lá khi focus */
-        }
-    </style>
 @endsection
 
 @section('table-quy')
@@ -74,7 +50,7 @@
         $perPageQuy = $donationAndCampaignsByProvince->perPage();
         $startQuy = ($currentPageQuy - 1) * $perPageQuy + 1;
     @endphp
-    <table class="table table-bordered">
+    <table class="table table-bordered table-dashboard-fun">
         <thead>
             <tr>
                 <th class="text-center" style="width: 10px"></th>
@@ -95,36 +71,12 @@
         </tbody>
     </table>
 
-    <div class="d-flex justify-content-center mt-3 paginate-dashboard-quy">
+    <div class="d-flex justify-content-center mt-3 mb-3 paginate-dashboard-quy">
         {{ $donationAndCampaignsByProvince->appends(['tab' => 'quy'])->links('pagination::bootstrap-4') }}
     </div>
 
 
-    <!-- Thêm CSS tùy chỉnh -->
-    <style>
-        .paginate-dashboard-quy .pagination .page-link {
-            color: #007BFF;
-            /* Màu xanh lá cho văn bản */
-        }
 
-        .paginate-dashboard-quy .pagination .page-item.active .page-link {
-            background-color: #007BFF;
-            /* Màu nền xanh lá cho trang hiện tại */
-            border-color: #007BFF;
-            /* Viền màu xanh lá cho trang hiện tại */
-            color: white;
-        }
-
-        .paginate-dashboard-quy .pagination .page-link:hover {
-            color: #007BFF;
-            /* Màu xanh lá đậm hơn khi hover */
-        }
-
-        .paginate-dashboard-quy .pagination .page-link:focus {
-            box-shadow: 0 0 0 0.2rem rgba(8, 61, 139, 0.25);
-            /* Bóng xanh lá khi focus */
-        }
-    </style>
 @endsection
 
 @section('overview-content')
@@ -192,7 +144,6 @@
 @endsection
 
 @section('content')
-    {{-- @include('admin.partials.card') --}}
     @include('admin.pages.dashboard.dashboard')
 @endsection
 
@@ -246,7 +197,6 @@
         //-------------
         //- DONUT CHART -
         //-------------
-        // Get context with jQuery - using jQuery's .get() method.
         var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
         var donutData = {
             labels: [
@@ -263,8 +213,6 @@
             maintainAspectRatio: false,
             responsive: true,
         }
-        //Create pie or douhnut chart
-        // You can switch between pie and douhnut using the method below.
         new Chart(donutChartCanvas, {
             type: 'doughnut',
             data: donutData,
@@ -274,15 +222,12 @@
         //-------------
         //- PIE CHART -
         //-------------
-        // Get context with jQuery - using jQuery's .get() method.
         var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
         var pieData = donutData;
         var pieOptions = {
             maintainAspectRatio: false,
             responsive: true,
         }
-        //Create pie or douhnut chart
-        // You can switch between pie and douhnut using the method below.
         new Chart(pieChartCanvas, {
             type: 'pie',
             data: pieData,
