@@ -3,29 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Registration Page (v2)</title>
+  <title>Đăng ký</title>
 
-  <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href={{asset("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback")}}>
-  <!-- Font Awesome -->
   <link rel="stylesheet" href={{asset("admin-rs/plugins/fontawesome-free/css/all.min.css")}}>
-  <!-- icheck bootstrap -->
   <link rel="stylesheet" href={{asset("admin-rs/plugins/icheck-bootstrap/icheck-bootstrap.min.css")}}>
-  <!-- Theme style -->
   <link rel="stylesheet" href={{asset("admin-rs/dist/css/adminlte.min.css")}}>
 </head>
 <body class="hold-transition register-page">
 <div class="register-box">
-  <div class="card card-outline card-primary">
+  <div class="card card-outline card-success">
     <div class="card-header text-center">
-      <a href="../../index2.html" class="h1"><b>Admin</b></a>
+      <h1 class="h1"><b>Việt Nam Journey</b></h1>
     </div>
     <div class="card-body">
-      <p class="login-box-msg">Register a new membership</p>
-
-      <form action="../../index.html" method="post">
+      <form action="{{ route('admin.auth.register-post') }}" method="post">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Username">
+          <input type="email" class="form-control login-input" placeholder="Email" name="email">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -33,7 +27,15 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password">
+          <input type="text" class="form-control login-input" placeholder="Username" name="username">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control login-input" placeholder="Password" name="password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -41,7 +43,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Retype password">
+          <input type="password" class="form-control login-input" placeholder="Confirm password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -49,34 +51,31 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-              <label for="agreeTerms">
-               I agree to the <a href="#">terms</a>
-              </label>
-            </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-success btn-block">Đăng ký</button>
           </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Register</button>
-          </div>
-          <!-- /.col -->
         </div>
       </form>
-
-      <a href="login.html" class="text-center">I already have a membership</a>
+      <p class="mt-2 mb-2 text-center">
+        <a href="{{ route('admin.auth.login') }}" class="text-center login-link">Đăng nhập</a>
+      </p>
     </div>
-    <!-- /.form-box -->
-  </div><!-- /.card -->
+  </div>
 </div>
-<!-- /.register-box -->
 
-<!-- jQuery -->
 <script src={{asset("admin-rs/plugins/jquery/jquery.min.js")}}></script>
-<!-- Bootstrap 4 -->
 <script src={{asset("admin-rs/plugins/bootstrap/js/bootstrap.bundle.min.js")}}></script>
-<!-- AdminLTE App -->
 <script src={{asset("admin-rs/dist/js/adminlte.min.js")}}></script>
+
+
+<style>
+  .input-group .login-input:focus {
+      border-color: #28A745 !important;
+  }
+
+  .login-link {
+      color: #28A745 !important;
+  }
+</style>
 </body>
 </html>

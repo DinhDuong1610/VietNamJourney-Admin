@@ -46,6 +46,7 @@ class AdminController extends Controller
     public function registerPost(Request $request)
     {
         $request->validate([
+            'email'=> 'required',
             'username' => 'required',
             'password' => 'required|min:6'
         ]);

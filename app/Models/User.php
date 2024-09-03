@@ -20,8 +20,8 @@ class User extends Authenticatable
     protected $table = 'user';
 
     protected $fillable = [
-        'userame',
-        'password',
+        'Userame',
+        'Password',
         'is_admin',
     ];
 
@@ -37,7 +37,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
+        'Password',
         'remember_token',
     ];
 
@@ -49,7 +49,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'password' => 'hashed',
+            'Password' => 'hashed',
         ];
     }
 
