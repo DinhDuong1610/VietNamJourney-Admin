@@ -53,6 +53,10 @@
             font-family: 'montserrat', sans-serif;
         }
 
+        .PageDetail .menu{
+            z-index: 999;
+        }
+
         .PageDetail .header {
             height: 600px;
             padding-top: 250px;

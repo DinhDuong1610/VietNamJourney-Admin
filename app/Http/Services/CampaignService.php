@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+
 
 
 class CampaignService extends BaseCrudService
@@ -373,4 +376,119 @@ class CampaignService extends BaseCrudService
 
         return $status;
     }
+
+    public function createCampaign(Request $request)
+    {
+        // // Xác thực dữ liệu đầu vào
+        // $validator = Validator::make($request->all(), [
+        //     'userId' => 'required|numeric',
+        //     'name' => 'required|string|max:255',
+        //     'province' => 'required|string|max:255',
+        //     'district' => 'required|string|max:255',
+        //     'location' => 'required|string', // Tạm thời là string, sau sẽ decode JSON
+        //     'dateStart' => 'required|date',
+        //     'dateEnd' => 'required|date',
+        //     'totalMoney' => 'required|numeric',
+        //     'moneyByVNJN' => 'required|numeric',
+        //     'timeline' => 'required|string', // Tạm thời là string, sau sẽ decode JSON
+        //     'infoContact' => 'required|string', // Tạm thời là string, sau sẽ decode JSON
+        //     'infoOrganization' => 'required|string', // Tạm thời là string, sau sẽ decode JSON
+        //     'image' => 'required|file|mimes:jpeg,png,jpg,gif|max:51200',
+        //     'description' => 'required|string',
+        //     'plan' => 'required|string',
+        // ]);
+
+        // // Kiểm tra nếu dữ liệu không hợp lệ
+        // if ($validator->fails()) {
+        //     return ['error' => $validator->errors()];
+        // }
+
+        // Xử lý file ảnh và lưu vào thư mục storage
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+            $imagePath = $image->storeAs('image', $imageName);
+        } else {
+            return ['error' => 'File ảnh không hợp lệ hoặc không tồn tại'];
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $campaign = new Campaign();
+            $campaign->userid = $request->userid;
+            $campaign->name = $request->name;
+            $campaign->province = $request->province;
+            $campaign->district = $request->district;
+            // $campaign->location = $request->location;
+            $campaign->location = json_decode($request->location, true);
+            $campaign->dateStart = $request->dateStart;
+            $campaign->dateEnd = $request->dateEnd;
+            $campaign->totalMoney = $request->totalMoney;
+            $campaign->moneyByVNJN = $request->moneyByVNJN;
+            $campaign->timeline = json_decode($request->timeline, true); // Giải mã JSON
+            $campaign->infoContact = json_decode($request->infoContact, true); // Giải mã JSON
+            $campaign->infoOrganization = json_decode($request->infoOrganization, true); // Giải mã JSON
+            $campaign->image = $imagePath;
+            $campaign->description = $request->description;
+            $campaign->plan = $request->plan;
+            $campaign->status = 0;
+
+            $campaign->save();
+            DB::commit();
+
+            return ['success' => 'Thêm chiến dịch thành công', 'campaign' => $campaign];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Không thể thêm chiến dịch: ' . $e->getMessage());
+            return ['error' => 'Không thể thêm chiến dịch: ' . $e->getMessage()];
+        }
+    }
+
+    public function updateCampaign($request)
+    {
+        try {
+            DB::beginTransaction();
+
+            // Tìm chiến dịch theo ID
+            $campaign = Campaign::find($request->id);
+            if (!$campaign) {
+                return ['status' => 404, 'error' => 'Chiến dịch không tồn tại'];
+            }
+
+            // Cập nhật các thuộc tính của chiến dịch
+            if ($request->has('name')) $campaign->name = $request->name;
+            if ($request->has('province')) $campaign->province = $request->province;
+            if ($request->has('district')) $campaign->district = $request->district;
+            // if ($request->has('location')) $campaign->location = $request->location;
+            if ($request->has('location')) $campaign->location = json_decode($request->location, true);
+            if ($request->has('dateStart')) $campaign->dateStart = $request->dateStart;
+            if ($request->has('dateEnd')) $campaign->dateEnd = $request->dateEnd;
+            if ($request->has('totalMoney')) $campaign->totalMoney = $request->totalMoney;
+            if ($request->has('moneyByVNJN')) $campaign->moneyByVNJN = $request->moneyByVNJN;
+            if ($request->has('timeline')) $campaign->timeline = json_decode($request->timeline, true);
+            if ($request->has('infoContact')) $campaign->infoContact = json_decode($request->infoContact, true);
+            if ($request->has('infoOrganization')) $campaign->infoOrganization = json_decode($request->infoOrganization, true);
+            if ($request->has('description')) $campaign->description = $request->description;
+            if ($request->has('plan')) $campaign->plan = $request->plan;
+
+            // Xử lý file ảnh (nếu có)
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+                $imagePath = $image->storeAs('image', $imageName);
+                $campaign->image = $imagePath;
+            }
+
+            // Lưu các thay đổi vào cơ sở dữ liệu
+            $campaign->save();
+            DB::commit();
+
+            return ['status' => 200, 'campaign' => $campaign];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return ['status' => 500, 'error' => 'Không thể cập nhật chiến dịch: ' . $e->getMessage()];
+        }
+    }
+
 }
