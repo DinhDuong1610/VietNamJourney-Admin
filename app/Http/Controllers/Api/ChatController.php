@@ -352,7 +352,7 @@ class ChatController extends Controller
 
         // Truy vấn lấy thông tin nhóm
         $groupInfo = DB::table('campaign')
-            ->select('province', 'name', 'image')
+            ->select('province', 'name', 'image', 'userId')
             ->where('id', $group_id)
             ->first();
 
@@ -408,13 +408,8 @@ class ChatController extends Controller
             $imagePath = url($imagePath); // Đường dẫn hoàn chỉnh của ảnh
         }
 
-        // Lấy tin nhắn cuối cùng trong nhóm
-        $lastMessage = DB::table('chatgroup_message')
-            ->where('campaign_id', $group_id)
-            ->orderBy('id', 'desc')
-            ->first();
-
-        $now = now();
+        // Lấy thời gian hiện tại với múi giờ Việt Nam
+        $now = now()->setTimezone('Asia/Ho_Chi_Minh');
 
         // Tạo tin nhắn mới
         $chatData = [
@@ -425,20 +420,25 @@ class ChatController extends Controller
             'created_at' => $now,
         ];
 
+        // Lấy tin nhắn cuối cùng trong nhóm
+        $lastMessage = DB::table('chatgroup_message')
+            ->where('campaign_id', $group_id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
         // Kiểm tra thời gian chênh lệch và bỏ qua cập nhật thời gian nếu cần
         if ($lastMessage && Carbon::parse($lastMessage->created_at)->diffInMinutes($now) < 10) {
             // Nếu thời gian chênh lệch nhỏ hơn 10 phút, không cập nhật 'created_at'
             unset($chatData['created_at']);
         }
 
-        // Chèn tin nhắn mới vào DB
+        // Chèn tin nhắn mới vào DB và lấy ID của tin nhắn mới
         $chatId = DB::table('chatgroup_message')->insertGetId($chatData);
 
-        // Lấy lại tin nhắn để trả về cho client
+        // Lấy lại tin nhắn vừa chèn để trả về cho client
         $chat = DB::table('chatgroup_message')
             ->select('user_from', 'content', 'image', 'created_at')
             ->where('id', $chatId)
-            ->orderBy('created_at', 'asc')
             ->first();
 
         // Truy vấn thông tin user

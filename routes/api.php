@@ -13,8 +13,9 @@ use App\Http\Controllers\Api\TaiKhoanController;
 use App\Http\Controllers\Api\CongDongController;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Api\MeetingController;
 
- 
+
 
 Route::group(['prefix' => 'email'], function () {
     Route::get('/{userId}', [EmailController::class, 'getEmailsUser']);
@@ -56,11 +57,21 @@ Route::post('/getUnFollowedUsers', [FollowController::class, 'getUnFollowedUsers
 Route::post('/updateFollower', [FollowController::class, 'updateFollower']);
 Route::post('/getComments', [PostController::class, 'getComments']);
 Route::post('/addComment', [PostController::class, 'addComment']);
+Route::post('/index', [MeetingController::class, 'index']);
+Route::post('/getMemberMeeting', [MeetingController::class, 'getMemberMeeting']);
+Route::post('/getInformationMeeting', [MeetingController::class, 'getInformationMeeting']);
+Route::post('/checkMemberMeeting', [MeetingController::class, 'checkMemberMeeting']);
+Route::post('/CreateMeeting', [MeetingController::class, 'CreateMeeting']);
+Route::post('/scheduleMeeting', [MeetingController::class, 'scheduleMeeting']);
+Route::post('/closeMeeting', [MeetingController::class, 'closeMeeting']);
 
 Route::post('/addPostGroup', [CongDongController::class, 'addPostGroup']);
 Route::post('/getSocialPosts', [CongDongController::class, 'getSocialPosts']);
 Route::post('/getCampaignUser', [CongDongController::class, 'getCampaignUser']);
 Route::post('/getTopGroup', [CongDongController::class, 'getTopGroup']);
+Route::post('/getCampaignPostsConfirm', [CongDongController::class, 'getCampaignPostsConfirm']);
+Route::post('/confirmCampaignPost', [CongDongController::class, 'confirmCampaignPost']);
+Route::post('/checkAdminGroup', [CongDongController::class, 'checkAdminGroup']);
 Route::get('/getSocialOutstanding', [CongDongController::class, 'getSocialOutstanding']);
 Route::post('/getCampaignPosts', [CongDongController::class, 'getCampaignPosts']);
 Route::post('/getInformationCampaign', [CongDongController::class, 'getInformationCampaign']);
@@ -81,4 +92,3 @@ Route::post('/sendMessage', [ChatController::class, 'sendMessage']);
 Route::post('/getGroupUser', [ChatController::class, 'getGroupUser']);
 Route::post('/getGroupChats', [ChatController::class, 'getGroupChats']);
 Route::post('/sendMessageGroup', [ChatController::class, 'sendMessageGroup']);
-
