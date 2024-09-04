@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class TaiKhoanController extends Controller
 {
@@ -28,7 +29,7 @@ class TaiKhoanController extends Controller
         try {
             // Check login information
             $user = DB::table('user')
-                ->select('id', 'Username', 'Password') // Chỉ định rõ các cột cần lấy
+                ->select('id', 'Username', 'Password', 'token') // Lấy thêm trường token
                 ->where('Username', $username)
                 ->first();
 
@@ -36,11 +37,15 @@ class TaiKhoanController extends Controller
                 // Set User_ID and Username cookies
                 return response()->json([
                     'success' => 'Đăng nhập thành công',
-                    'user' => ['UserLogin_ID' => $user->id, 'Username' => $user->Username]
+                    'user' => [
+                        'UserLogin_ID' => $user->id,
+                        'Username' => $user->Username,
+                        'Token' => $user->token // Trả về token
+                    ]
                 ])->cookie('User_ID', $user->id, 43200) // 30 days
                     ->cookie('UserName', $user->Username, 43200); // 30 days
             } else {
-                return response()->json(['error' => 'Email hoặc mật khẩu sai !'], 401);
+                return response()->json(['error' => 'Email hoặc mật khẩu sai!'], 401);
             }
         } catch (\Exception $e) {
             return response()->json(['error' => 'Kết nối đến cơ sở dữ liệu thất bại: ' . $e->getMessage()], 500);
@@ -68,23 +73,33 @@ class TaiKhoanController extends Controller
         $imagePath = "public/images/clone.jpg";
 
         try {
+            // Generate a random token
+            $token = Str::random(30);
+
             // Insert into user table
             $userId = DB::table('user')->insertGetId([
                 'Username' => $username,
                 'Password' => Hash::make($password),
+                'token' => $token, // Lưu token vào bảng user
             ]);
 
             // Insert into user_information table
             DB::table('user_information')->insert([
                 'UserLogin_ID' => $userId,
                 'Username' => $username,
-                // 'Image' => $imagePath,
                 'Image' => 'image/clone.jpg',
                 'Name' => 'TÀI KHOẢN',
                 'Email' => $email,
             ]);
 
-            return response()->json(['success' => true, 'user' => ['UserLogin_ID' => $userId, 'Username' => $username]]);
+            return response()->json([
+                'success' => true,
+                'user' => [
+                    'UserLogin_ID' => $userId,
+                    'Username' => $username,
+                    'Token' => $token // Trả về token
+                ]
+            ]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Database error: ' . $e->getMessage()], 500);
         }
