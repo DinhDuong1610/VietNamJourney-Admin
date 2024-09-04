@@ -23,7 +23,12 @@ class FunController extends Controller
 
     public function getByCampaign(Request $request, $campaignId)
     {
-        $funs = $this->funService->getFunByCampaign($campaignId);
-        return response()->json(['funs' => $funs]);
+        $data = $this->funService->getFunByCampaign($campaignId);
+
+        return response()->json([
+            'funs' => $data['funs'],
+            'totalAmount' => $data['totalAmount'],
+            'countAmount' => $data['countAmount'],
+        ]);
     }
 }

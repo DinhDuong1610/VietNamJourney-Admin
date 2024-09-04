@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\CongDongController;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\MeetingController;
+use App\Http\Controllers\Api\HomeController;
 
 
 
@@ -24,6 +25,8 @@ Route::group(['prefix' => 'email'], function () {
     Route::post('/create', [EmailController::class, 'createEmail']);
     Route::post('/readed/{id}', [EmailController::class, 'updateEmailStatus']);
 });
+
+Route::get('home', [HomeController::class, 'home']);
 
 Route::get('listCampaignIng/{province}', [CampaignController::class, 'getCampaignsIng']);
 Route::get('listCampaignWill/{province}', [CampaignController::class, 'getCampaignsWill']);
@@ -39,8 +42,8 @@ Route::post('updateCampaign', [CampaignController::class, 'updateCampaign']);
 Route::get('getJoined/{campaignId}', [VolunteerController::class, 'getJoined']);
 Route::get('getPending/{campaignId}', [VolunteerController::class, 'getPending']);
 
-Route::post('registerVolunteer', [VolunteerController::class, 'register']); // chưa làm
-Route::post('updateStatus', [VolunteerController::class, 'updateStatus']); // chưa làm
+Route::post('registerVolunteer', [VolunteerController::class, 'register']); 
+Route::post('updateStatus', [VolunteerController::class, 'updateStatus']);
 
 Route::get('getFun', [FunController::class, 'getFunWithoutCampaign']);
 Route::get('getFunByCampaign/{campaignId}', [FunController::class, 'getByCampaign']);

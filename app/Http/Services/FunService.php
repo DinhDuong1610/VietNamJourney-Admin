@@ -18,9 +18,6 @@ class FunService extends BaseCrudService
         $this->campaign = $campaign;
     }
 
-
-
-    // Lấy tổng 'amount' từ bảng 'fun' khi 'campaignId' IS NULL
     public function sumAmountWithoutCampaign()
     {
         return $this->fun
@@ -28,9 +25,10 @@ class FunService extends BaseCrudService
             ->sum('amount');
     }
 
-    public function funManager() {
+    public function funManager()
+    {
         $funOfVNJN = $this->sumAmountWithoutCampaign();
-        
+
         $funOfCampaign = $this->sumAmountByCampaign();
 
         $funCurrent = $funOfVNJN - ($this->sumTotalMoneyFromCampaign() - $funOfCampaign);
@@ -49,44 +47,33 @@ class FunService extends BaseCrudService
         }
 
         $funCampaigns = $this->campaign
-        ->where('status', 1)
-        ->withSum('fun as amount', 'amount')
-        ->with('fun')
-        ->orderBy('dateEnd', 'desc')
-        ->orderBy('province')
-        ->paginate(6);
+            ->where('status', 1)
+            ->withSum('fun as amount', 'amount')
+            ->with('fun')
+            ->orderBy('dateEnd', 'desc')
+            ->orderBy('province')
+            ->paginate(6);
 
         return [
-            'funCurrent'=> $funCurrent, 
-            'funOfVNJN'=> $funOfVNJN, 
-            'funOfCampaign'=> $funOfCampaign,
-            'funStatistics'=> $funStatistics,
-            'funCampaigns'=> $funCampaigns
+            'funCurrent' => $funCurrent,
+            'funOfVNJN' => $funOfVNJN,
+            'funOfCampaign' => $funOfCampaign,
+            'funStatistics' => $funStatistics,
+            'funCampaigns' => $funCampaigns
         ];
     }
 
-    // Lấy tổng 'amount' từ bảng 'fun' khi 'campaignId' không null
     public function sumAmountByCampaign()
     {
         return $this->fun
             ->whereNotNull('campaignId')
             ->sum('amount');
     }
-
-    // Lấy tổng 'totalMoney' từ bảng 'campaign'
     public function sumTotalMoneyFromCampaign()
     {
         return $this->campaign
             ->sum('totalMoney');
     }
-
-    
-
-
-
-
-
-
 
 
     public function getFunWithoutCampaign()
@@ -102,6 +89,14 @@ class FunService extends BaseCrudService
         $funs = $this->fun
             ->where('campaignId', $campaignId)
             ->get();
-        return $funs;
+
+        $totalAmount = $funs->sum('amount'); 
+        $countAmount = count($funs);
+
+        return [
+            'funs' => $funs,
+            'totalAmount' => $totalAmount,
+            'countAmount' => $countAmount
+        ];
     }
 }

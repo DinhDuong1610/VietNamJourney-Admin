@@ -4,18 +4,21 @@ namespace App\Http\Services;
 use App\Models\User;
 use App\Models\Campaign;
 use App\Models\Post;
+use App\Models\Fun;
 use Carbon\Carbon;
 class DashboardService
 {
     private User $user;
     private Campaign $campaign;
     private Post $post;
+    private Fun $fun;
 
-    public function __construct(User $user, Campaign $campaign, Post $post)
+    public function __construct(User $user, Campaign $campaign, Post $post, Fun $fun)
     {
         $this->user = $user;
         $this->campaign = $campaign;
         $this->post = $post;
+        $this->fun = $fun;
     }
 
     public function dashboard()
@@ -95,6 +98,25 @@ class DashboardService
             'userJoined' => $userJoined,
             'userNotJoined' => $userNotJoined,
             'donationAndCampaignsByProvince' => $donationAndCampaignsByProvince
+        ];
+    }
+
+    public function home() {
+        $users = $this->user
+        ->with('userInformation')
+        ->get()
+        ->count();
+
+        $campaigns = $this->campaign
+        ->get()
+        ->count();
+
+        $fun = $this->fun->whereNull('campaignId')->sum('amount') +  $this->fun->whereNotNull('campaignId')->sum('amount');
+
+        return [
+            'users'=> $users,
+            'campaigns'=> $campaigns,
+            'fun'=> $fun,
         ];
     }
 }

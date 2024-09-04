@@ -243,7 +243,13 @@ class CampaignService extends BaseCrudService
     public function getCampaignDetail_API($id)
     {
         try {
-            $campaign = $this->campaign->find($id);
+            $campaign = $this->campaign
+            ->withCount([
+                'volunteer as joined' => function ($query) {
+                    $query->where('status', 2);
+                },
+            ])
+            ->find($id);
 
             if (!$campaign) {
                 return Response::json([
