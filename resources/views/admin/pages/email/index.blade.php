@@ -20,28 +20,25 @@
                 <div class="card-folder card-body p-0">
                     <ul class="nav nav-pills flex-column">
                         <li class="nav-item active">
-                            <a href="{{ route('admin.pages.email.index') }}" class="nav-link">
+                            <a href="{{ route('admin.pages.email.index') }}" class="nav-link item-nav-link">
                                 <i class="fas fa-inbox"></i> Hộp thư đến
                                 <span class="badge bg-success float-right">{{ $emails_admin->total() }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.pages.email.send') }}" class="nav-link">
+                            <a href="{{ route('admin.pages.email.send') }}" class="nav-link item-nav-link">
                                 <i class="far fa-envelope"></i> Đã gửi
-                                {{-- <span class="badge bg-success float-right">{{ $emails_send->total() }}</span> --}}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link item-nav-link">
                                 <i class="far fa-trash-alt"></i> Thùng rác
                             </a>
                         </li>
                     </ul>
                 </div>
-                <!-- /.card-body -->
             </div>
         </div>
-        <!-- /.col -->
         <div class="col-md-10">
             <div class="card card-success card-outline">
                 <div class="card-header">
@@ -57,30 +54,26 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /.card-tools -->
                 </div>
-                <!-- /.card-header -->
                 <div class="card-body p-0">
                     <div class="table-responsive mailbox-messages">
                         <table class="table-email table table-hover table-striped">
                             <tbody>
                                 @foreach ($emails as $email)
-                                    <tr class="d-flex justify-content-between" data-email-id="{{ $email->id }}"
-                                        {{-- onclick="location.href='{{ route('admin.pages.email.read', $email->id) }}'" --}}>
+                                    <tr class="d-flex justify-content-between" data-email-id="{{ $email->id }}">
                                         <td class="mailbox-check">
                                             <div class="icheck-primary">
                                                 <input type="checkbox" value="" id="check{{ $email->id }}">
                                                 <label for="check{{ $email->id }}"></label>
                                             </div>
                                         </td>
-                                        {{-- <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td> --}}
                                         <td class="mailbox-name"><a
                                                 href='{{ route('admin.pages.email.read', $email->id) }}'>{{ $email->user->Username }}</a>
                                         </td>
                                         <td class="mailbox-subject">
                                             <div
-                                                style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: {{ $email->status == 0 && $email->isAdmin == 0 ? '600' : 'normal' }};">
-                                                <b>{{ $email->title }}</b> - {{ $email->content }}
+                                                style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: {{ $email->status == 0 && $email->isAdmin == 0 ? 'bold' : 'normal' }};">
+                                                <span>{{ $email->title }}</span> - {{ $email->content }}
                                             </div>
                                         </td>
                                         <td class="mailbox-date">{{ $email->created_at->format('H:i d/m/y') }}</td>
@@ -88,67 +81,29 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        <!-- /.table -->
-
-                        <style>
-                            .table-email tr {
-                                cursor: pointer;
-                            }
-
-                            .table-email tr .mailbox-check {
-                                width: 50px;
-                            }
-
-                            .table-email tr .mailbox-name {
-                                font-size: 18px;
-                                font-weight: 500;
-                                line-height: 100%;
-                                width: 200px;
-                                display: flex;
-                                align-items: center;
-                            }
-
-                            .table-email tr .mailbox-name a {
-                                color: #28a745;
-                            }
-
-                            .table-email tr .mailbox-subject {
-                                font-size: 18px;
-                                font-weight: 400;
-                                line-height: 100%;
-                                max-width: 700px;
-                                display: flex;
-                                align-items: center;
-                            }
-
-                            .table-email tr .mailbox-date {
-                                font-size: 16px;
-                                font-weight: 400;
-                                line-height: 100%;
-                                color: #606060;
-                                display: flex;
-                                align-items: center;
-                            }
-                        </style>
                     </div>
-                    <!-- /.mail-box-messages -->
                 </div>
-                <!-- /.card-body -->
                 <div class="card-footer p-0">
                     <div class="mailbox-controls">
                         <div class="d-flex justify-content-between align-items-center mt-2 px-4">
                             <b>{{ $emails->firstItem() }}-{{ $emails->lastItem() }}/{{ $emails->total() }}</b>
                             {{ $emails->links('pagination::bootstrap-4') }}
                         </div>
-                        <!-- /.float-right -->
                     </div>
                 </div>
             </div>
-            <!-- /.card -->
         </div>
-        <!-- /.col -->
     </div>
-    <!-- /.row -->
+
+
+
+
+
+
+
+
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -184,6 +139,50 @@
             });
         });
     </script>
+
+    <style>
+        .item-nav-link:hover {
+            color: #28a745 !important;
+        }
+        .table-email tr {
+            cursor: pointer;
+        }
+
+        .table-email tr .mailbox-check {
+            width: 50px;
+        }
+
+        .table-email tr .mailbox-name {
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 100%;
+            width: 200px;
+            display: flex;
+            align-items: center;
+        }
+
+        .table-email tr .mailbox-name a {
+            color: #28a745;
+        }
+
+        .table-email tr .mailbox-subject {
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 100%;
+            max-width: 700px;
+            display: flex;
+            align-items: center;
+        }
+
+        .table-email tr .mailbox-date {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 100%;
+            color: #606060;
+            display: flex;
+            align-items: center;
+        } 
+    </style>
 
     <style>
         .pagination .page-link {

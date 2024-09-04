@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\EmailController;
+use App\Http\Controllers\Admin\FunController;
 
 
 
@@ -18,16 +19,14 @@ Route::get('/register', [AdminController::class, 'register'])->name('admin.auth.
 Route::post('register-post', [AdminController::class, 'registerPost'])->name('admin.auth.register-post');
 
 
-// Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth', 'admin-middleware']], function () {
-Route::get('/', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth', 'admin-middleware']], function () {
+    // Route::group(['prefix' => 'admin'], function () {
+    Route::get('/', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
 
     Route::get('/user', [UserController::class, 'userList'])->name('admin.pages.user.index');
 
-    Route::get('/fund', function () {
-        return view('admin.pages.fund.index');
-    });
+    Route::get('/fun', [FunController::class, 'funManager'])->name('admin.pages.fun.index');
 
     Route::group(['prefix' => 'campaign'], function () {
         Route::get('/list', [CampaignController::class, 'campaignList'])->name('admin.pages.campaign.list');

@@ -28,10 +28,11 @@ class UserService extends BaseCrudService
     public function register($request)
     {
         $userCreate = $this->user->create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password)
+            'Username' => $request->username,
+            'Password' => bcrypt($request->password),
+            'is_admin' => 1,
         ]);
+        
         return $userCreate;
     }
 
