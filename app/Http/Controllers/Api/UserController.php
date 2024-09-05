@@ -21,13 +21,21 @@ class UserController extends Controller
     {
         $userId = $request->input('User_ID');
 
+        // Truy vấn thông tin người dùng từ bảng user_information
         $user = DB::table('user_information')->where('UserLogin_ID', $userId)->first();
 
         if ($user) {
-            // Check if the user has an image
+            // Truy vấn token từ bảng user
+            $token = DB::table('user')->where('id', $userId)->value('token');
+
+            // Kiểm tra xem người dùng có hình ảnh không
             if ($user->Image) {
-                $user->Image = url($user->Image); // Convert the image path to URL
+                $user->Image = url($user->Image); // Chuyển đường dẫn hình ảnh thành URL
             }
+
+            // Thêm token vào đối tượng người dùng
+            $user->token = $token;
+
             return response()->json(['success' => true, 'user' => $user]);
         } else {
             return response()->json(['success' => false, 'message' => 'User not found'], 404);

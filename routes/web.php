@@ -19,9 +19,9 @@ Route::get('/register', [AdminController::class, 'register'])->name('admin.auth.
 Route::post('register-post', [AdminController::class, 'registerPost'])->name('admin.auth.register-post');
 
 
+Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth', 'admin-middleware']], function () {
+// Route::group(['prefix' => 'admin'], function () {
 
-Route::group(['prefix' => '', 'middleware' => ['web', 'auth', 'admin-middleware']], function () {
-    // Route::group(['prefix' => 'admin'], function () {
     Route::get('/', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
 
     Route::get('/user', [UserController::class, 'userList'])->name('admin.pages.user.index');
@@ -55,4 +55,3 @@ Route::group(['prefix' => '', 'middleware' => ['web', 'auth', 'admin-middleware'
         Route::post('/email/create', [EmailController::class, 'createEmail'])->name('admin.pages.email.create');
     });
 });
-

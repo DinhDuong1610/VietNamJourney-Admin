@@ -364,7 +364,7 @@ class ChatController extends Controller
         $chats = DB::table('chatgroup_message')
             ->select('user_from', 'content', 'image', 'created_at')
             ->where('campaign_id', $group_id)
-            ->orderBy('created_at', 'asc')
+            ->orderBy('id', 'asc')
             ->get();
 
         // Truy vấn lấy thông tin user và xử lý chuyển đổi đường dẫn hình ảnh
@@ -409,7 +409,7 @@ class ChatController extends Controller
         }
 
         // Lấy thời gian hiện tại với múi giờ Việt Nam
-        $now = now()->setTimezone('Asia/Ho_Chi_Minh');
+        $now = Carbon::now('Asia/Ho_Chi_Minh');
 
         // Tạo tin nhắn mới
         $chatData = [
@@ -423,16 +423,23 @@ class ChatController extends Controller
         // Lấy tin nhắn cuối cùng trong nhóm
         $lastMessage = DB::table('chatgroup_message')
             ->where('campaign_id', $group_id)
+            ->whereNotNull('created_at')
             ->orderBy('created_at', 'desc')
             ->first();
 
         // Kiểm tra thời gian chênh lệch và bỏ qua cập nhật thời gian nếu cần
-        if ($lastMessage && Carbon::parse($lastMessage->created_at)->diffInMinutes($now) < 10) {
-            // Nếu thời gian chênh lệch nhỏ hơn 10 phút, không cập nhật 'created_at'
-            unset($chatData['created_at']);
+        if ($lastMessage) {
+            $lastMessageTime = Carbon::parse($lastMessage->created_at)->setTimezone('Asia/Ho_Chi_Minh');
+            $timeDifference = $now->diffInMinutes($lastMessageTime);
+
+            if (
+                $timeDifference < 10
+            ) {
+                // Nếu thời gian chênh lệch nhỏ hơn 10 phút, không cập nhật 'created_at'
+                unset($chatData['created_at']);
+            }
         }
 
-        // Chèn tin nhắn mới vào DB và lấy ID của tin nhắn mới
         $chatId = DB::table('chatgroup_message')->insertGetId($chatData);
 
         // Lấy lại tin nhắn vừa chèn để trả về cho client
@@ -452,7 +459,7 @@ class ChatController extends Controller
             'user_from' => $chat->user_from,
             'content' => $chat->content,
             'image' => $chat->image ? url($chat->image) : null,
-            'created_at' => $chat->created_at ? Carbon::parse($chat->created_at)->format('d-m H:i') : null,
+            'created_at' => $chat->created_at ? Carbon::parse($chat->created_at, 'Asia/Ho_Chi_Minh')->format('d-m H:i') : null,
             'user_name' => $user ? $user->name : 'Unknown',
             'user_image' => $user && $user->image ? url($user->image) : null
         ];
