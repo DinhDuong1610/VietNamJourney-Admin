@@ -20,7 +20,7 @@ Route::post('register-post', [AdminController::class, 'registerPost'])->name('ad
 
 
 
-Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth', 'admin-middleware']], function () {
+Route::group(['prefix' => '', 'middleware' => ['web', 'auth', 'admin-middleware']], function () {
     // Route::group(['prefix' => 'admin'], function () {
     Route::get('/', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
 
