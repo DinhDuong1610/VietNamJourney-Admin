@@ -157,7 +157,7 @@
                     'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
                 ],
                 datasets: [{
-                        label: 'Số lượng chiến dịch diễn ra',
+                        label: 'Số tiền quỹ nhận được',
                         backgroundColor: '#28A745',
                         borderColor: '#28A745',
                         pointRadius: false,
