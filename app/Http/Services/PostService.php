@@ -26,7 +26,10 @@ class PostService extends BaseCrudService
     public function getPendingPosts()
     {
         return $this->post
-            ->where('status', 0)
+            ->where(function ($query) {
+                $query->where('status', 0)
+                    ->orWhereNull('status');
+            })
             ->with('user.userInformation')
             ->orderBy('created_at', 'desc')
             ->get();
@@ -46,7 +49,7 @@ class PostService extends BaseCrudService
     {
         $post = $this->post->find($id);
         if ($post) {
-            $post->status = 1; 
+            $post->status = 1;
             return $post->save();
         }
         return false;

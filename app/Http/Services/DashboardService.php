@@ -67,7 +67,8 @@ class DashboardService
         // Số lượng người dùng đã tham gia chiến dịch (không phải người tạo chiến dịch)
         $userJoined = $this->user
             ->whereHas('userInformation', function ($query) {
-                $query->where('check', 0);
+                $query->where('check', 0)
+                    ->orWhereNull('check'); 
             })
             ->whereHas('volunteer')
             ->count();
@@ -75,7 +76,8 @@ class DashboardService
         // Số lượng người dùng chưa tham gia chiến dịch nào
         $userNotJoined = $this->user
             ->whereHas('userInformation', function ($query) {
-                $query->where('check', 0); 
+                $query->where('check', 0)
+                    ->orWhereNull('check'); 
             })
             ->doesntHave('volunteer') 
             ->count();
